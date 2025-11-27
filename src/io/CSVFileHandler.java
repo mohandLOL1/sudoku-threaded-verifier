@@ -12,7 +12,6 @@ public class CSVFileHandler { //singleton design pattern
          if(instance == null) {
              instance = new CSVFileHandler();
          }
-
          return instance;
      }
 

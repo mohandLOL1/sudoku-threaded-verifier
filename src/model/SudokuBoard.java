@@ -15,7 +15,8 @@ public class SudokuBoard {
         return new SudokuBoard(loadedBoard);
     }
 
-    public int[] getRow(int i) {
+    public int[] getRow(int i){
+
         return null;
     }
 
@@ -24,10 +25,9 @@ public class SudokuBoard {
     }
 
     public int[] getSubgrid(int i) {
-        // implement subgrid retrieval logic
+           // implement subgrid retrieval logic
         return null;
     }
-
 }
 
 
