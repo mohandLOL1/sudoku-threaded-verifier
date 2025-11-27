@@ -3,7 +3,6 @@ package io;
 public class CSVFileHandler { //singleton design pattern
      private static CSVFileHandler instance = null;
 
-
      private CSVFileHandler(){
      }
 
@@ -12,6 +11,7 @@ public class CSVFileHandler { //singleton design pattern
          if(instance == null) {
              instance = new CSVFileHandler();
          }
+
          return instance;
      }
 

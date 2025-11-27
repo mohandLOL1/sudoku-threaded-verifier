@@ -1,4 +1,4 @@
-package app;
+package modes;
 
 public class SequentialVerificationMode implements VerificationMode{
 

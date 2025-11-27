@@ -1,4 +1,4 @@
-package app;
+package modes;
 
 public class TwentySevenThreadVerificationMode implements VerificationMode {
 

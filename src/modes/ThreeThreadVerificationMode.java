@@ -1,4 +1,4 @@
-package app;
+package modes;
 
 public class ThreeThreadVerificationMode implements VerificationMode{
 
