@@ -1,38 +1,55 @@
 package threads;
+ import model.SudokuBoard;
 
 public class BoxVerifier implements ThreadVerifier {
    
-    private final int[][] board;
-    private final int num;
-    private final int row;
-    private final int col;
+    private SudokuBoard board;
+    private boolean valid = true;
     
-    public BoxVerifier(int[][]board,int num,int row, int col){
+    public BoxVerifier(SudokuBoard board){
     
     this.board=board;
-    this.num=num;
-    this.row=row;
-    this.col=col;
+
     }
     
+  
+    
+    @Override
+    public void run() {
+        for (int i = 0; i < 9 && valid; i++) {
+            int[] box = board.getSubgrid(i);
+
+            if (!isvalid_num(box)) {
+                System.out.println("Invalid subgrid at index: " + i);
+
+                valid = false;
+                break;
+            }
+        }
+
+    }
+
     @Override
     public boolean isValid() {
-        int local_row = row - row % 3;
-        int local_col = col - col % 3;
-        for (int i = local_row; i < local_row + 3; i++) {
-            for (int j = local_col; j < local_col + 3; j++) {
-                if (board[i][j] == num) {
-                    return false;
-                }
+   
+        return valid;
+    }
+    
+    public boolean isvalid_num(int[] arr) {
+
+        boolean[] n = new boolean[10];
+
+        for (int i = 0; i < arr.length; i++) {
+            int num = arr[i];
+
+            if (num < 1 || num > 9) {
+                return false;
             }
+            if (n[num]) {
+                return false;
+            }
+            n[num] = true;
         }
         return true;
     }
-    
-    @Override
-    public void run(){
-        isValid();
-    }
-
-
 }
