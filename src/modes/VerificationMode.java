@@ -1,5 +1,7 @@
 package modes;
 
+import model.SudokuBoard;
+
 public interface VerificationMode {
-    public abstract int[][] verify();
+    public abstract void verify(SudokuBoard board);
 }

@@ -1,11 +1,13 @@
 package modes;
 
+import model.SudokuBoard;
+
 public class TwentySevenThreadVerificationMode implements VerificationMode {
 
 
     @Override
-    public int[][] verify() {
-        return new int[0][];
+    public void verify(SudokuBoard board) {
+
     }
 
 }

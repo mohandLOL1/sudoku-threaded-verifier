@@ -1,10 +1,12 @@
 package modes;
 
+import model.SudokuBoard;
+
 public class ThreeThreadVerificationMode implements VerificationMode{
 
 
     @Override
-    public int[][] verify() {
-        return new int[0][];
+    public void verify(SudokuBoard board) {
+
     }
 }
