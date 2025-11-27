@@ -1,6 +1,7 @@
 package modes;
 
 import model.SudokuBoard;
+import util.UnitVerificationResult;
 
 public class SequentialVerificationMode implements VerificationMode{
 
@@ -8,4 +9,5 @@ public class SequentialVerificationMode implements VerificationMode{
     public void verify(SudokuBoard board) {
 
     }
+
 }
