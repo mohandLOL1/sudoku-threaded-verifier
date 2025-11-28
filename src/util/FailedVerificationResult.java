@@ -3,6 +3,7 @@ package util;
 import java.util.Arrays;
 
 public class FailedVerificationResult {
+
     private final String unitType;  // "row", "column", "box"
     private final int unitIndex;    // which row/col/box
     private final int value;        // duplicated value

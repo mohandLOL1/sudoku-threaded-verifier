@@ -5,7 +5,7 @@ import model.SudokuBoard;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class UnitChecker {
+public class UnitChecker { //units are either the rows, columns or boxes
 
     public static ArrayList<FailedVerificationResult> checkRow(int row, SudokuBoard board) {
         ArrayList<FailedVerificationResult> results = new ArrayList<>();

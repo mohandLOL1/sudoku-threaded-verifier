@@ -20,7 +20,7 @@ public class SudokuBoard {
 
     public int[] getRow(int i) {
         int[] row = new int[9];
-        for (int j = 0; j < 9; j++) {
+        for(int j = 0; j < 9; j++) {
             row[j] = board[i][j];
         }
         return row;
