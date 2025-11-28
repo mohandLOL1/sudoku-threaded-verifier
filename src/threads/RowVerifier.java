@@ -1,17 +1,11 @@
 package threads;
-
-import util.UnitVerificationResult;
+import model.SudokuBoard;
 
 public class RowVerifier implements ThreadVerifier {
 
-    @Override
-    public void run(){
-
-
-    }
 
     @Override
-    public boolean isValid() {
-        return false;
+    public void run() {
+
     }
 }
