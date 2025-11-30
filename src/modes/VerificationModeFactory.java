@@ -2,7 +2,6 @@ package modes;
 
 
 public class VerificationModeFactory {
-
     public static VerificationMode getMode(String modeName) {
         return switch (modeName.toLowerCase()) {
             case "sequential" -> new SequentialVerificationMode();

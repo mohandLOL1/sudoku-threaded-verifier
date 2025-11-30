@@ -4,10 +4,10 @@ import java.util.Arrays;
 
 public class FailedVerificationResult {
 
-    private final String unitType;  // "row", "column", "box"
-    private final int unitIndex;    // which row/col/box
-    private final int value;        // duplicated value
-    private final int[] positions;  // indices where duplicates occurred
+    private String unitType;  // "row", "column", "box"
+    private int unitIndex;    // which row/col/box
+    private int value;        // duplicated value
+    private int[] positions;  // indices where duplicates occurred
 
     public FailedVerificationResult(String unitType, int unitIndex, int value, int[] positions) {
         this.unitType = unitType;

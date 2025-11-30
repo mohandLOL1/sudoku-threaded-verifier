@@ -21,8 +21,11 @@ public class SudokuApp {
             VerificationMode mode = VerificationModeFactory.getMode(modeName); // could throw IllegalArgumentException
 
             long start = System.nanoTime();
+
             ArrayList<FailedVerificationResult> failures = mode.verify(board);
+
             long end = System.nanoTime();
+
             displayFailuresInCLI(failures);
 
             System.out.printf("Verification took %.3f ms%n", (end - start) / 1_000_000.0);
@@ -38,7 +41,6 @@ public class SudokuApp {
             System.out.println("VALID SUDOKU BOARD");
         }
         else{
-
             for(FailedVerificationResult failedVerificationResult : failures){
                 System.out.println(failedVerificationResult);
             }

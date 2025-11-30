@@ -12,7 +12,6 @@ public class SudokuBoard {
         this.board = grid;
     }
 
-
     public static SudokuBoard fromCSV(String filePath) throws IOException {
         int[][] loadedBoard = CSVFileHandler.getInstance().CSVReader(filePath);
         return new SudokuBoard(loadedBoard);
