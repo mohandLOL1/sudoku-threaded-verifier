@@ -50,8 +50,12 @@ public class TwentySevenThreadVerificationMode implements VerificationMode {
         colThreads.forEach(t -> allFailures.addAll(t.getFailures()));
         boxThreads.forEach(t -> allFailures.addAll(t.getFailures()));
 
-        // print results
-        allFailures.forEach(System.out::println);
+        if(allFailures.isEmpty())
+            System.out.println("VALID Sudoku solution.");
+        else{
+            System.out.println("INVALID Sudoku solution.");
+            allFailures.forEach(System.out::println);
+        }
     }
 
 
