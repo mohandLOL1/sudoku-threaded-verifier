@@ -36,8 +36,11 @@ public class ThreeThreadVerificationMode implements VerificationMode{
         allFailures.addAll(colThread.getFailures());
         allFailures.addAll(boxThread.getFailures());
 
-        for(FailedVerificationResult verificationResult : allFailures){
-            System.out.println(verificationResult);
+        if(allFailures.isEmpty())
+            System.out.println("VALID Sudoku solution.");
+        else{
+            System.out.println("INVALID Sudoku solution.");
+            allFailures.forEach(System.out::println);
         }
     }
 }
