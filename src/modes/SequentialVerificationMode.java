@@ -10,7 +10,7 @@ public class SequentialVerificationMode implements VerificationMode{
 
 
     @Override
-    public void verify(SudokuBoard board) {
+    public ArrayList<FailedVerificationResult> verify(SudokuBoard board) {
 
         ArrayList<FailedVerificationResult> allFailures = new ArrayList<>();
 
@@ -30,12 +30,6 @@ public class SequentialVerificationMode implements VerificationMode{
                 allFailures.addAll(UnitChecker.checkBox(i, board));
             }
 
-            if(allFailures.isEmpty())
-                System.out.println("VALID Sudoku solution.");
-            else{
-                System.out.println("INVALID Sudoku solution.");
-                allFailures.forEach(System.out::println);
-            }
-
+            return allFailures;
         }
 }

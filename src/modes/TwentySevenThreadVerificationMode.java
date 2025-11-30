@@ -11,7 +11,7 @@ public class TwentySevenThreadVerificationMode implements VerificationMode {
 
     @Override
 
-    public void verify(SudokuBoard board) {
+    public ArrayList<FailedVerificationResult> verify(SudokuBoard board) {
 
         ArrayList<RowUnitVerifier> rowThreads = new ArrayList<>();
         ArrayList<ColumnUnitVerifier> colThreads = new ArrayList<>();
@@ -50,15 +50,11 @@ public class TwentySevenThreadVerificationMode implements VerificationMode {
         colThreads.forEach(t -> allFailures.addAll(t.getFailures()));
         boxThreads.forEach(t -> allFailures.addAll(t.getFailures()));
 
-        if(allFailures.isEmpty())
-            System.out.println("VALID Sudoku solution.");
-        else{
-            System.out.println("INVALID Sudoku solution.");
-            allFailures.forEach(System.out::println);
+        return allFailures;
         }
     }
 
 
 
-    }
+
 

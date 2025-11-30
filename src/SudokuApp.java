@@ -1,10 +1,13 @@
 import model.SudokuBoard;
 import modes.*;
+import util.FailedVerificationResult;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class SudokuApp {
     public static void main(String[] args) {
+
         if (args.length < 2) {
             System.out.println("Usage: java -jar <appname>.jar <csvPath> <mode>");
             return;
@@ -18,8 +21,9 @@ public class SudokuApp {
             VerificationMode mode = VerificationModeFactory.getMode(modeName); // could throw IllegalArgumentException
 
             long start = System.nanoTime();
-            mode.verify(board);
+            ArrayList<FailedVerificationResult> failures = mode.verify(board);
             long end = System.nanoTime();
+            displayFailuresInCLI(failures);
 
             System.out.printf("Verification took %.3f ms%n", (end - start) / 1_000_000.0);
         } catch (IOException e) {
@@ -27,6 +31,19 @@ public class SudokuApp {
         } catch (IllegalArgumentException e) {
             System.out.println("Invalid mode of verification, please choose either: sequential, 3-threaded, or 27-threaded");
         }
+    }
+
+    private static void displayFailuresInCLI(ArrayList<FailedVerificationResult> failures) {
+        if(failures.isEmpty()){
+            System.out.println("VALID SUDOKU BOARD");
+        }
+        else{
+
+            for(FailedVerificationResult failedVerificationResult : failures){
+                System.out.println(failedVerificationResult);
+            }
+        }
+
     }
 }
 

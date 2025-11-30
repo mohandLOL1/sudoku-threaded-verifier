@@ -13,7 +13,7 @@ public class ThreeThreadVerificationMode implements VerificationMode{
 
 
     @Override
-    public void verify(SudokuBoard board){
+    public ArrayList<FailedVerificationResult> verify(SudokuBoard board){
 
         RowUnitVerifier rowThread = new RowUnitVerifier(board, -1); // -1 means all rows
         ColumnUnitVerifier colThread = new ColumnUnitVerifier(board, -1);
@@ -36,11 +36,6 @@ public class ThreeThreadVerificationMode implements VerificationMode{
         allFailures.addAll(colThread.getFailures());
         allFailures.addAll(boxThread.getFailures());
 
-        if(allFailures.isEmpty())
-            System.out.println("VALID Sudoku solution.");
-        else{
-            System.out.println("INVALID Sudoku solution.");
-            allFailures.forEach(System.out::println);
-        }
+        return allFailures;
     }
 }
