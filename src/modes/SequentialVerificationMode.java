@@ -4,32 +4,37 @@ import model.SudokuBoard;
 import util.FailedVerificationResult;
 import util.UnitChecker;
 
+import java.util.ArrayList;
+
 public class SequentialVerificationMode implements VerificationMode{
 
 
     @Override
     public void verify(SudokuBoard board) {
 
+        ArrayList<FailedVerificationResult> allFailures = new ArrayList<>();
+
             for (int i = 0; i < 9; i++) {
-                for (FailedVerificationResult verificationResult : UnitChecker.checkRow(i, board)) {
-                    System.out.println(verificationResult);
-                }
+                allFailures.addAll(UnitChecker.checkRow(i, board));
             }
 
-            System.out.println("-----------------------------------");
+
 
             for (int i = 0; i < 9; i++) {
-                for (FailedVerificationResult verificationResult : UnitChecker.checkColumn(i, board)) {
-                    System.out.println(verificationResult);
-                }
+                allFailures.addAll(UnitChecker.checkColumn(i, board));
             }
 
-           System.out.println("-----------------------------------");
+
 
             for (int i = 0; i < 9; i++) {
-                for (FailedVerificationResult verificationResult : UnitChecker.checkBox(i, board)) {
-                    System.out.println(verificationResult);
-                }
+                allFailures.addAll(UnitChecker.checkBox(i, board));
+            }
+
+            if(allFailures.isEmpty())
+                System.out.println("VALID Sudoku solution.");
+            else{
+                System.out.println("INVALID Sudoku solution.");
+                allFailures.forEach(System.out::println);
             }
 
         }
