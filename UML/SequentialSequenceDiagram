@@ -1,0 +1,87 @@
+@startuml
+actor User
+
+User -> SudokuApp : run "java -jar sudoku-validator.jar resources/board.csv sequential"
+activate SudokuApp
+
+SudokuApp -> SudokuBoard : fromCSV(filePath)
+activate SudokuBoard
+
+SudokuBoard -> CSVFileHandler : getInstance()
+activate CSVFileHandler
+CSVFileHandler --> SudokuBoard : instance
+deactivate CSVFileHandler
+
+SudokuBoard -> CSVFileHandler : CSVReader(filePath)
+activate CSVFileHandler
+CSVFileHandler -> FileReader : read file
+activate FileReader
+FileReader --> CSVFileHandler : lines of CSV
+deactivate FileReader
+
+CSVFileHandler -> CSVFileHandler : parse rows into int[][]
+CSVFileHandler --> SudokuBoard : int[][] grid
+deactivate CSVFileHandler
+
+SudokuBoard -> SudokuBoard : new SudokuBoard(grid)
+SudokuBoard --> SudokuApp : SudokuBoard object
+deactivate SudokuBoard
+
+SudokuApp -> VerificationModeFactory : getMode(modeName)
+activate VerificationModeFactory
+VerificationModeFactory --> SudokuApp : SequentialVerificationMode object
+deactivate VerificationModeFactory
+
+SudokuApp -> SequentialVerificationMode : verify(board)
+activate SequentialVerificationMode
+
+loop check 9 rows
+    SequentialVerificationMode -> UnitChecker : checkRow(i, board)
+    activate UnitChecker
+    UnitChecker -> SudokuBoard : getRow(i)
+    activate SudokuBoard
+    SudokuBoard --> UnitChecker : int[9]
+    deactivate SudokuBoard
+    UnitChecker -> UnitChecker : detect duplicates
+    UnitChecker --> SequentialVerificationMode : row failures
+    deactivate UnitChecker
+end
+
+loop check 9 columns
+    SequentialVerificationMode -> UnitChecker : checkColumn(i, board)
+    activate UnitChecker
+    UnitChecker -> SudokuBoard : getColumn(i)
+    activate SudokuBoard
+    SudokuBoard --> UnitChecker : int[9]
+    deactivate SudokuBoard
+    UnitChecker -> UnitChecker : detect duplicates
+    UnitChecker --> SequentialVerificationMode : column failures
+    deactivate UnitChecker
+end
+
+loop check 9 boxes
+    SequentialVerificationMode -> UnitChecker : checkBox(i, board)
+    activate UnitChecker
+    UnitChecker -> SudokuBoard : getSubgrid(i)
+    activate SudokuBoard
+    SudokuBoard --> UnitChecker : int[9]
+    deactivate SudokuBoard
+    UnitChecker -> UnitChecker : detect duplicates
+    UnitChecker --> SequentialVerificationMode : box failures
+    deactivate UnitChecker
+end
+
+SequentialVerificationMode -> SequentialVerificationMode : aggregate failures
+
+alt no failures
+    SequentialVerificationMode -> SudokuApp : print("VALID Sudoku solution.")
+else failures found
+    SequentialVerificationMode -> SudokuApp : print("INVALID Sudoku solution.")
+    loop for each failure
+        SequentialVerificationMode -> SudokuApp : print(FailedVerificationResult)
+    end
+end
+
+deactivate SequentialVerificationMode
+deactivate SudokuApp
+@enduml
