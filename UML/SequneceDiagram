@@ -1,0 +1,118 @@
+sequenceDiagram
+    actor User
+    participant App as SudokuApp
+    participant Board as SudokuBoard
+    participant Handler as CSVFileHandler
+    participant Factory as VerificationModeFactory
+    participant Mode as VerificationMode
+    participant Thread as UnitVerifierThread
+    participant Checker as UnitChecker
+
+    User->>App: main(csvPath, modeName)
+    activate App  %% Lifeline for SudokuApp starts here
+    activate Checker  %% Lifeline for UnitChecker starts here
+
+    %% 1. CSV LOADING PHASE
+    note over App, Handler: Phase 1: Data Loading
+    App->>Board: fromCSV(csvPath)
+    activate Board
+    Board->>Handler: getInstance()
+    activate Handler
+    Handler-->>Board: instance
+    deactivate Handler
+    
+    Board->>Handler: CSVReader(csvPath)
+    activate Handler
+    Handler-->>Board: int[][] grid
+    deactivate Handler
+    
+    Board-->>App: SudokuBoard instance
+    deactivate Board
+
+    %% 2. FACTORY PHASE
+    note over App, Factory: Phase 2: Mode Selection
+    App->>Factory: getMode(modeName)
+    activate Factory
+    Factory-->>App: VerificationMode instance
+    deactivate Factory
+
+    %% 3. VERIFICATION PHASE
+    note over App, Checker: Phase 3: Verification
+    App->>Mode: verify(board)
+    activate Mode
+
+    alt "Mode is Sequential"
+        note right of Mode: Single Main Thread
+        
+        loop For all rows
+            Mode->>Checker: checkRow(i, board)
+            Checker-->>Mode: failure list
+        end
+        loop For all columns
+            Mode->>Checker: checkColumn(i, board)
+            Checker-->>Mode: failure list
+        end
+        loop For all boxes
+            Mode->>Checker: checkBox(i, board)
+            Checker-->>Mode: failure list
+        end
+
+    else "Mode is 3-Threaded"
+        note right of Mode: 3 Parallel Threads
+        
+        create participant RowThread as RowUnitVerifier
+        Mode->>RowThread: new(board, -1)
+        
+        Mode->>RowThread: start()
+        activate RowThread
+        
+        par "Parallel Execution: Row/Col/Box"
+            Mode->>Mode: Waits (join)
+        and
+            RowThread->>RowThread: run()
+            loop Check All Rows
+                RowThread->>Checker: checkRow(r, board)
+                Checker-->>RowThread: failure list
+            end
+        end
+        
+        Mode->>RowThread: join()
+        deactivate RowThread
+        Mode->>RowThread: getFailures()
+
+    else "Mode is 27-Threaded"
+        note right of Mode: 27 Parallel Threads
+        
+        create participant SingleRowThread as RowUnitVerifier
+        Mode->>SingleRowThread: new(board, i)
+        
+        Mode->>SingleRowThread: start()
+        activate SingleRowThread
+        
+        par "Parallel Execution: 27 Units"
+            Mode->>Mode: Waits (join)
+        and
+            SingleRowThread->>SingleRowThread: run()
+            SingleRowThread->>Checker: checkRow(index, board)
+            Checker-->>SingleRowThread: failure list
+        end
+        
+        Mode->>SingleRowThread: join()
+        deactivate SingleRowThread
+        Mode->>SingleRowThread: getFailures()
+    end
+
+    Mode-->>App: ArrayList failures
+    deactivate Mode
+
+    %% 4. OUTPUT PHASE
+    note over App: Phase 4: Output
+    alt "failures is empty"
+        App->>User: Print "VALID SUDOKU BOARD"
+    else "failures exist"
+        loop for each failure
+            App->>User: Print failure details
+        end
+    end
+
+    %% End lifelines (App and Checker remain active until diagram ends)
